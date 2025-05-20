@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Anniversary</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: 'Prompt', sans-serif;
+      overflow: hidden;
+      position: relative;
+      text-align: center;
+      background: linear-gradient(-45deg, #fdcbf4, #f2aaec, #ff8cd7, #ffffff);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1 {
+      font-size: 3rem;
+      color: white;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+      animation: slideUp 2s ease-in-out;
+    }
+
+    @keyframes slideUp {
+      0% { transform: translateY(50px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    .heart-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      animation: pulse 1.5s infinite;
+    }
+
+    .heart-button img {
+      width: 150px;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .image-frame {
+      position: relative;
+      display: none;
+      padding: 20px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      max-width: 90%;
+      max-height: 80%;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+    .special-button {
+  background-color: #f8798c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  display: none;
+}
+
+.special-button:hover {
+  background-color: #f8798c;
+}
+
+    .image-frame::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 10px;
+      background: #ffcce0;
+      border-radius: 50%;
+      z-index: -1;
+    }
+
+    #imageDisplay {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .fade-in {
+      animation: fade 0.5s ease-in;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    #endMessage {
+      display: none;
+      color: white;
+      font-size: 2rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+      margin-top: 30px;
+    }
+
+    .replay-button {
+      background-color: #ff66b2;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .replay-button:hover {
+      background-color: #ff3385;
+    }
+
+    .sweet-text {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.8);
+      color: #ff4081;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      animation: fade 1s ease-in;
+    }
+
+    /* แสดงภาพทั้งหมดในกริด */
+    .image-gallery {
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 20px;
+      grid-auto-rows: 200px;
+      width: 100%;
+      max-width: 1200px;
+      overflow-x: scroll;
+      margin-top: 20px;
+    }
+
+    .image-item {
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      border-radius: 15px;
+      transition: transform 0.3s ease;
+    }
+
+    .image-item:hover {
+      transform: scale(1.05);
+    }
+
+    .image-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    /* อนิเมชั่นเมื่อแสดงภาพขยาย */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      padding-top: 60px;
+      justify-content: center;
+      align-items: center;
+      animation: fadeInModal 0.5s ease-in-out;
+    }
+
+    @keyframes fadeInModal {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      margin: auto;
+      display: block;
+      max-width: 80%;
+      max-height: 80%;
+      animation: zoomIn 0.5s ease-in-out;
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.5); }
+      to { transform: scale(1); }
+    }
+
+    .modal-content:hover {
+      cursor: pointer;
+      transform: scale(1.05);
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 35px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: #ff66b2;
+    }
+    @media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  .heart-button img {
+    width: 100px;
+  }
+
+  .image-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    overflow-x: auto;
+  }
+
+  .image-frame {
+    padding: 10px;
+  }
+
+  #endMessage {
+    font-size: 1.5rem;
+  }
+
+  .replay-button {
+    font-size: 1rem;
+    padding: 8px 16px;
+  }
+  
+
+  .sweet-text {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
+
+  .modal-content {
+    max-width: 95%;
+    max-height: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  .image-gallery {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+  
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .heart-button img {
+        width: 100px;
+      }
+
+      body {
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div id="startScreen">
+    <h1>สุขสันต์วันครบรอบ 💕</h1>
+    <button class="heart-button" onclick="startMemoryShow()">
+      <img src="heart.png" alt="heart"/>
+    </button>
+  </div>
+
+  <div class="image-frame" id="imageFrame">
+    <img id="imageDisplay" class="fade-in" />
+    <div id="sweetText" class="sweet-text">รักมากที่สุดในโลกเลย 💖</div>
+  </div>
+
+  <div class="image-gallery" id="imageGallery">
+    <!-- ภาพทั้งหมดจะปรากฏที่นี่ -->
+  </div>
+
+  <div id="endMessage">
+    สุขสันต์วันครบรอบ 1 เดือนนะ<br>รักที่สุดเลย 💖
+  </div>
+
+  <button class="replay-button" onclick="showGallery()">คลังรูปภาพ</button>
+  <button class="special-button" onclick="window.location.href='gift.html'">จดหมายให้แฟน</button>
+
+
+
+  <audio id="bgMusic" src="love.mp3" preload="auto" loop></audio>
+
+  <!-- Modal สำหรับขยายภาพ -->
+  <div id="myModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+  </div>
+
+  <script>
+    const sweetMessages = [
+      { text: "สุขสันต์วันครบรอบ 1 เดือนน้าาา 🎉🎂💗", image: "img1.png" },
+      { text: "ดีใจมากๆๆๆ ที่ได้กลับมาอยู่ด้วยกันนน 🥹💞", image: "img2.png" },
+      { text: "บางทีอาจจะมีไม่เข้าใจกันบ้าง 😅🤍", image: "img3.png" },
+      { text: "แต่ก็ผ่านมันมาด้ายย 😘🩷✨", image: "img4.png" },
+      { text: "เค้ารักเธอน้าา 🫶🏻💘", image: "img5.jpg" },
+      { text: "รักที่สุดเลยยคับบ 💓💕", image: "img6.jpg" },
+      { text: "พี่ชอบเวลาที่หนูยิ้มมากๆเลยย 😊🫶🏻🌷", image: "img7.jpg" },
+      { text: "มันน่ารักมากกกเลยย 🐰🌸💞", image: "img8.jpg" },
+      { text: "อยู่ด้วยกันแบบนี้ไปอีกนานๆเลยนะคับบ~ ❤️💘👫🏻", image: "img9.jpg" }
+
+    ];
+ 
+    let currentImage = 0;
+    const imageDisplay = document.getElementById("imageDisplay");
+    const sweetText = document.getElementById("sweetText");
+    const imageFrame = document.getElementById("imageFrame");
+    const endMessage = document.getElementById("endMessage");
+    const bgMusic = document.getElementById("bgMusic");
+    const replayButton = document.querySelector(".replay-button");
+    const imageGallery = document.getElementById("imageGallery");
+    const modal = document.getElementById("myModal");
+    const specialButton = document.querySelector(".special-button");
+    const modalImage = document.getElementById("modalImage");
+
+    function startMemoryShow() {
+      document.getElementById("startScreen").style.display = "none";
+      imageFrame.style.display = "block";
+      bgMusic.play();
+
+      function showNextImage() {
+        if (currentImage < sweetMessages.length) {
+          sweetText.textContent = sweetMessages[currentImage].text;
+          imageDisplay.src = sweetMessages[currentImage].image;
+          imageDisplay.classList.add("fade-in");
+
+          setTimeout(() => {
+            imageDisplay.classList.remove("fade-in");
+            currentImage++;
+            setTimeout(showNextImage, 1000);
+          }, 5000); // แสดงแต่ละภาพ 5 วินาที
+        } else {
+          endMessage.style.display = "block";
+          specialButton.style.display = "inline-block";  // ปุ่มจดหมายให้แฟน
+          replayButton.style.display = "inline-block";
+
+        }
+      }
+
+      showNextImage();
+    }
+
+    function showGallery() {
+      imageGallery.style.display = "grid"; // แสดงกริดของภาพ
+      imageGallery.innerHTML = ''; // เคลียร์กริดเดิม
+      sweetMessages.forEach((item, index) => {
+        const imageItem = document.createElement("div");
+        imageItem.classList.add("image-item");
+        imageItem.innerHTML = `<img src="${item.image}" alt="memory image" onclick="openModal('${item.image}')">`;
+        imageGallery.appendChild(imageItem);
+      });
+    }
+
+    function openModal(imageSrc) {
+      modal.style.display = "flex";
+      modalImage.src = imageSrc;
+    }
+
+    function closeModal() {
+      modal.style.display = "none";
+    }
+  </script>
+
+</body>
+</html>

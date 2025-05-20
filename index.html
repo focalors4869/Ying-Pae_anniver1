@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ใส่รหัสวันครบรอบ</title>
+  <style>
+    body {
+      font-family: 'Prompt', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #ffe6f0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: #fff0f5;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  z-index: 1;
+}
+
+    #display {
+  font-size: 28px;
+  letter-spacing: 6px;
+  padding: 12px;
+  background: #fffafc;
+  border-radius: 12px;
+  border: 2px solid #ff99cc;
+  margin-bottom: 20px;
+  width: 200px;
+  text-align: center;
+  font-family: 'Kanit', sans-serif;
+  color: #ff3399;
+  box-shadow: 0 0 10px rgba(255, 153, 204, 0.3);
+}
+
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 60px);
+      grid-gap: 10px;
+      justify-content: center;
+    }
+
+    .keypad button {
+      padding: 15px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ff66b2;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .keypad button:hover {
+      background-color: #ff3385;
+    }
+
+    .special {
+      background-color: #ffd6e8;
+      color: #333;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+
+    /* หัวใจลอย */
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: pink;
+      transform: rotate(45deg);
+      animation: floatUp 10s linear infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: pink;
+      border-radius: 50%;
+    }
+
+    .heart::before { top: -10px; left: 0; }
+    .heart::after { left: -10px; top: 0; }
+
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) scale(1) rotate(45deg); opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1.5) rotate(45deg); opacity: 0; }
+    }
+
+    .overlay-hearts {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #ffe6f0;
+      z-index: 10;
+      display: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .overlay-hearts .big-heart {
+      width: 50px; height: 50px;
+      background-color: #ff80aa;
+      transform: rotate(45deg);
+      margin: 5px;
+      animation: zoomHeart 1s ease-in-out forwards;
+      position: relative;
+    }
+
+    .overlay-hearts .big-heart::before,
+    .overlay-hearts .big-heart::after {
+      content: "";
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: #ff80aa;
+      border-radius: 50%;
+    } 
+
+    .overlay-hearts .big-heart::before { top: -25px; left: 0; }
+    .overlay-hearts .big-heart::after { left: -25px; top: 0; }
+
+    @keyframes zoomHeart {
+      0% { transform: scale(0.5) rotate(45deg); opacity: 0; }
+      100% { transform: scale(1.5) rotate(45deg); opacity: 1; }
+    }
+  
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+        width: 90%;
+      }
+
+      #display {
+        width: 100%;
+        font-size: 20px;
+      }
+
+      .keypad {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+
+      .keypad button {
+        font-size: 16px;
+        padding: 12px;
+      }
+    }
+</style>
+</head>
+<body>
+  <!-- หัวใจลอย -->
+  <script>
+    for (let i = 0; i < 20; i++) {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (Math.random() * 5 + 5) + "s";
+      document.body.appendChild(heart);
+    }
+  </script>
+
+  <div class="container">
+    <h2>กรุณากดรหัสวันครบรอบ 💖</h2>
+    <div id="display">--/--/--</div>
+
+    <div class="keypad">
+      <!-- ตัวเลข -->
+      <button onclick="press('1')">1</button>
+      <button onclick="press('2')">2</button>
+      <button onclick="press('3')">3</button>
+      <button onclick="press('4')">4</button>
+      <button onclick="press('5')">5</button>
+      <button onclick="press('6')">6</button>
+      <button onclick="press('7')">7</button>
+      <button onclick="press('8')">8</button>
+      <button onclick="press('9')">9</button>
+      <button class="special" onclick="backspace()">⬅️</button>
+      <button onclick="press('0')">0</button>
+      <button class="special" onclick="clearDisplay()">❌</button>
+      <button class="special" style="grid-column: span 3;" onclick="checkPassword()">✅ ยืนยัน</button>
+    </div>
+    <div id="error" class="error"></div>
+  </div>
+
+  <audio id="successSound" src="success.mp3"></audio>
+
+  <div class="overlay-hearts" id="overlay"></div>
+
+  <script>
+    let code = "";
+
+    function press(num) {
+      if (code.length < 6) {
+        code += num;
+        updateDisplay();
+      }
+    }
+
+    function updateDisplay() {
+      let formatted = "";
+      if (code.length >= 2) {
+        formatted += code.slice(0, 2) + "/";
+        if (code.length >= 4) {
+          formatted += code.slice(2, 4) + "/";
+          formatted += code.slice(4, 6);
+        } else {
+          formatted += code.slice(2);
+        }
+      } else {
+        formatted = code;
+      }
+      document.getElementById("display").textContent = formatted.padEnd(8, "-");
+    }
+
+    function backspace() {
+      code = code.slice(0, -1);
+      updateDisplay();
+    }
+
+    function clearDisplay() {
+      code = "";
+      updateDisplay();
+    }
+
+    function checkPassword() {
+      const correctPassword = "200468"; // ไม่ต้องมี /
+      const error = document.getElementById("error");
+      const sound = document.getElementById("successSound");
+      const overlay = document.getElementById("overlay");
+
+      if (code === correctPassword) {
+        sound.play();
+        overlay.style.display = "flex";
+        for (let i = 0; i < 100; i++) {
+          const bigHeart = document.createElement("div");
+          bigHeart.classList.add("big-heart");
+          overlay.appendChild(bigHeart);
+        }
+        setTimeout(() => {
+          window.location.href = "blessing2.html";
+        }, 2000);
+      } else {
+        error.textContent = "รหัสไม่ถูกต้อง ลองอีกครั้งนะ 💔";
+      }
+    }
+
+    updateDisplay(); // แสดงตอนโหลดหน้า
+  </script>
+</body>
+</html>
