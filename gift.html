@@ -107,6 +107,30 @@
       z-index: 999;
       animation: fadeIn 1s ease-in;
     }
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(3, 80px); /* 3 คอลัมน์ */
+  }
+
+  .card {
+    width: 80px;
+    height: 80px;
+  }
+
+  .card .front,
+  .card .back {
+    border-radius: 8px;
+  }
+
+  .letter-button img {
+    width: 80px;
+  }
+
+  .letter-content {
+    width: 90%;
+    font-size: 14px;
+    padding: 20px;
+  }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translate(-50%, -60%); }
